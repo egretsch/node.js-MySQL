@@ -28,8 +28,9 @@ function products() {
         for (var i = 0; i < res.length; i++) {
             console.log("Item ID: " + res[i].item_ID + " || Product Name: " + res[i].product_name 
                 + " || Department Name: " + res[i].department_name + " || Price: " + res[i].price 
-                + " || Stock Quantity: " + res[i].stock_quantity);
+                + " || Stock Quantity: " + res[i].stock_quantity + "\n");
         }
+        console.log("---------------------------------------------------------------------------------" + "\n");
         runSearch()
     });
 }
@@ -37,16 +38,12 @@ function products() {
 function runSearch() {
     inquirer
         .prompt({
-            name: "action",
-            type: "rawlist",
-            message: "What would you like to do?",
-            choices: [
-                "Find songs by artist",
-                "Find all artists who appear more than once",
-                "Find data within a specific range",
-                "Search for a specific song",
-                "Find artists with a top song and top album in the same year"
-            ]
+            name: "product",
+            message: "What prodcut would you like buy?"
+        },
+        {
+            name: "quantity",
+            message: "How much would you like buy?"
         })
         .then(function (answer) {
             
