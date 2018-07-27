@@ -129,7 +129,7 @@ function addNewProduct() {
             message: "what is the new item number?"
         },
         {
-            name: "porduct",
+            name: "porducts",
             type: "input",
             message: "what is the new product?"
         },
@@ -150,13 +150,15 @@ function addNewProduct() {
         }])
         .then(function (answer) {
             let id = answer.id;
-            let product = answer.product;
+            let product = answer.products;
             let department = answer.department;
             let price = answer.price;
             let quantity = answer.quantity;
-            var query = "UPDATE products SET stock_quantity=" + quantity + " WHERE product_name = " + '"' + product + '"';
+            var query = 'INSERT INTO products (item_ID, product_name, department_name, price, stock_quantity) VALUES(' +  id + ', ' + '"' + product + '"' + ', ' + '"' + department + '"' + ', '
+                + price + ', ' + quantity + ')';
             connection.query(query, function (err, res) {
                 if (err) throw err;
+                console.log(id, product, department, price, quantity);
                 console.log("---------------------------------------------------------------------------------" + "\n");
                 products();
             });
