@@ -44,11 +44,11 @@ function runSearch() {
                     break;
 
                 case "Add to Inventory":
-                    rangeSearch();
+                    addProducts()
                     break;
 
                 case "Add New Product":
-                    songSearch();
+                    addNewProduct();
                     break;
             }
         });
@@ -66,6 +66,7 @@ function products() {
 
 
 function findProducts() {
+    products();
     var query = "SELECT * FROM products";
     let itemToOrder = [];
     connection.query(query, function (err, res) {
@@ -75,8 +76,89 @@ function findProducts() {
                 itemToOrder.push(res[i].product_name)
             } 
         }
-        console.log("Because ther is 5 items or less. You need to order: " + itemToOrder)
+        console.log("Because ther is 5 items or less. You need to order: " + itemToOrder + ".")
         console.log("---------------------------------------------------------------------" + "\n");
-        connection.end();
     });
+}
+
+function addProducts() {
+    var query = "SELECT * FROM products";
+    let items = [];
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        for (var i = 0; i < res.length; i++) {
+            items.push(res[i].product_name);
+        }
+        console.log("---------------------------------------------------------------------------------" + "\n");
+        addInventory(items);
+    });
+}
+
+function addInventory(items) {
+    inquirer
+        .prompt([{
+            name: "product",
+            type: "list",
+            message: "Witch prodcut would you like incresse stock?",
+            choices: items
+        },
+        {
+            name: "quantity",
+            type: "input",
+            message: "How much would you order buy?"
+        }])
+        .then(function (answer) {
+            let product = answer.product;
+            let quantity = answer.quantity;
+            var query = "UPDATE products SET stock_quantity=" + quantity + " WHERE product_name = " + '"' + product + '"';
+            connection.query(query, function (err, res) {
+                if (err) throw err;
+                console.log("---------------------------------------------------------------------------------" + "\n");
+                products();
+            });
+        });
+}
+
+
+function addNewProduct() {
+    inquirer
+        .prompt([{
+            name: "id",
+            type: "input",
+            message: "what is the new item number?"
+        },
+        {
+            name: "porduct",
+            type: "input",
+            message: "what is the new product?"
+        },
+        {
+            name: "department",
+            type: "input",
+            message: "what department is the new item in?"
+        },
+        {
+            name: "price",
+            type: "input",
+            message: "what is the new product price?"
+        },
+        {
+            name: "quantity",
+            type: "input",
+            message: "How much would you order buy?"
+        }])
+        .then(function (answer) {
+            let id = answer.id;
+            let product = answer.product;
+            let department = answer.department;
+            let price = answer.price;
+            let quantity = answer.quantity;
+            var query = "UPDATE products SET stock_quantity=" + quantity + " WHERE product_name = " + '"' + product + '"';
+            connection.query(query, function (err, res) {
+                if (err) throw err;
+                console.log("---------------------------------------------------------------------------------" + "\n");
+                products();
+            });
+        });
 }
