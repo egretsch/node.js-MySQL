@@ -52,7 +52,8 @@ function runSearch(items) {
             let product = answer.product;
             let quantity = answer.quantity;
             if (Number.isInteger(parseInt(quantity))) {
-                checkAvailibilty(product, quantity)
+                checkAvailibilty(product, quantity);
+                productSales(product, quantity)
             } else {
                 console.log("!!!!!Sell was unalbe to be complted!!!!! \nPlease enter a valid number")
             }
@@ -60,7 +61,19 @@ function runSearch(items) {
         });
 }
 
-
+function productSales(product, quantity) {
+    connection.query("SELECT product_sales, price FROM products WHERE product_name=?", [product], function (err, res) {
+        if (err) throw err;
+        let proSales = res[0].product_sales;
+        let itemPrice = res[0].price;
+        let salesFormProduct = itemPrice * quantity;
+        let totaleSalesFormProduct = salesFormProduct + proSales;
+        // addProductSales(totaleSalesFormProduct);
+        console.log(totaleSalesFormProduct);
+        
+    });
+    
+}
 function checkAvailibilty(product, quantity){
     
     connection.query("SELECT stock_quantity, price FROM products WHERE product_name=?", [product], function (err, res) {
@@ -89,4 +102,13 @@ function updateDB(updateInventory, product){
     ], function(err, res) {
         if (err) throw err;
     })
+}
+
+function addProductSales(totaleSalesFormProduct) {
+    var query = "UPDATE products SET stock_quantity=" + quantity + " WHERE product_name = " + '"' + product + '"';
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.log("---------------------------------------------------------------------------------" + "\n");
+        products();
+    });
 }
