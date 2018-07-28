@@ -129,7 +129,7 @@ function addNewProduct() {
             message: "what is the new item number?"
         },
         {
-            name: "porducts",
+            name: "products",
             type: "input",
             message: "what is the new product?"
         },
