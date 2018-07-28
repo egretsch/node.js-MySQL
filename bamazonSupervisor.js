@@ -34,7 +34,7 @@ function runSearch() {
         .then(function (answer) {
             switch (answer.action) {
                 case "View Product Sales by Department":
-                    products();
+                    totalProfit();
                     break;
 
                 case "Create New Department":
@@ -72,6 +72,22 @@ function addNewProduct() {
 function departments() {
     var query = "SELECT * FROM departments";
     connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        console.log("---------------------------------------------------------------------------------" + "\n");
+        connection.end();
+    });
+}
+
+function totalProfit() {
+    
+    connection.query("SELECT d.department_id, d.department_name, SUM(d.over_head_costs) AS total_over_head, " +
+        " SUM(p.product_sales) AS total_product_sales, " +
+        " SUM(p.product_sales) - SUM(d.over_head_costs) AS total_profit " +
+        " FROM departments d " +
+        " INNER JOIN products p ON " +
+        " d.department_name = p.department_name " +
+        " GROUP BY d.department_id;", function (err, res) {
         if (err) throw err;
         console.table(res);
         console.log("---------------------------------------------------------------------------------" + "\n");

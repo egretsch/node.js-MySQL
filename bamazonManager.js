@@ -111,15 +111,23 @@ function addInventory(items) {
         .then(function (answer) {
             let product = answer.product;
             let quantity = answer.quantity;
-            var query = "UPDATE products SET stock_quantity=" + quantity + " WHERE product_name = " + '"' + product + '"';
-            connection.query(query, function (err, res) {
+            connection.query("SELECT stock_quantity FROM products WHERE product_name=?", [product], function (err, res) {
                 if (err) throw err;
-                console.log("---------------------------------------------------------------------------------" + "\n");
-                products();
+                let proQuantity = res[0].stock_quantity;
+                let newAddedQuantity = proQuantity + quantity;
+                addedQuantity(product, newAddedQuantity);
             });
         });
 }
 
+function addedQuantity(product, newAddedQuantity) {
+    var query = "UPDATE products SET stock_quantity=" + newAddedQuantity + " WHERE product_name = " + '"' + product + '"';
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.log("---------------------------------------------------------------------------------" + "\n");
+        products();
+    });
+}
 
 function addNewProduct() {
     inquirer
