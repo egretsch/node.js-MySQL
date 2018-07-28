@@ -68,9 +68,7 @@ function productSales(product, quantity) {
         let itemPrice = res[0].price;
         let salesFormProduct = itemPrice * quantity;
         let totaleSalesFormProduct = salesFormProduct + proSales;
-        // addProductSales(totaleSalesFormProduct);
-        console.log(totaleSalesFormProduct);
-        
+        addProductSales(product, totaleSalesFormProduct);        
     });
     
 }
@@ -104,11 +102,25 @@ function updateDB(updateInventory, product){
     })
 }
 
-function addProductSales(totaleSalesFormProduct) {
-    var query = "UPDATE products SET stock_quantity=" + quantity + " WHERE product_name = " + '"' + product + '"';
+function addProductSales(product, totaleSalesFormProduct) {
+    var query = "UPDATE products SET product_sales=" + totaleSalesFormProduct + " WHERE product_name = " + '"' + product + '"';
     connection.query(query, function (err, res) {
         if (err) throw err;
         console.log("---------------------------------------------------------------------------------" + "\n");
-        products();
+        products2();
+    });
+}
+
+function products2() {
+    var query = "SELECT * FROM products";
+    let items = [];
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        for (var i = 0; i < res.length; i++) {
+            items.push(res[i].product_name);
+        }
+        console.log("---------------------------------------------------------------------------------" + "\n");
+        connection.end()
     });
 }
