@@ -1,3 +1,5 @@
+// Runs the NPM packages as well as the connection to the server
+
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var cTable = require("console.table");
@@ -20,7 +22,7 @@ connection.connect(function (err) {
     console.log("connected as id " + connection.threadId + "\n");
     products();
 });
-
+// Selects all the information from the database
 function products() {
     var query = "SELECT * FROM products";
     let items = [];
@@ -34,7 +36,7 @@ function products() {
         runSearch(items)
     });
 }
-
+// Allows buyer to buy products and check to see if it's in the inventory
 function runSearch(items) {
     inquirer
         .prompt([{
@@ -60,7 +62,7 @@ function runSearch(items) {
             
         });
 }
-
+// Does the math to allow customer to see the total cost of their order
 function productSales(product, quantity) {
     connection.query("SELECT product_sales, price FROM products WHERE product_name=?", [product], function (err, res) {
         if (err) throw err;
@@ -72,6 +74,7 @@ function productSales(product, quantity) {
     });
     
 }
+// Checks to see if order has enough quantity to complete sale
 function checkAvailibilty(product, quantity){
     
     connection.query("SELECT stock_quantity, price FROM products WHERE product_name=?", [product], function (err, res) {
@@ -88,7 +91,7 @@ function checkAvailibilty(product, quantity){
     });
 }
 
-
+// Updates inventory after purchase
 function updateDB(updateInventory, product){
     connection.query("UPDATE products SET ? WHERE ?", [
         {
@@ -101,7 +104,7 @@ function updateDB(updateInventory, product){
         if (err) throw err;
     })
 }
-
+// Updates inventory after purchase
 function addProductSales(product, totaleSalesFormProduct) {
     var query = "UPDATE products SET product_sales=" + totaleSalesFormProduct + " WHERE product_name = " + '"' + product + '"';
     connection.query(query, function (err, res) {
@@ -110,7 +113,7 @@ function addProductSales(product, totaleSalesFormProduct) {
         products2();
     });
 }
-
+// Allows customer to see it current updated quantity of inventory
 function products2() {
     var query = "SELECT * FROM products";
     let items = [];
