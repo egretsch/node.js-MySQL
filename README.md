@@ -8,7 +8,7 @@ Was to create a Amazon like analog to simulate using databases and giving a user
 
 ## Instructions
 
-To run app someone must clone a repository. To clone repository you go into your terminal navigate to the folder you wish to run it from. Then you type in get clone. Then you need to type in node customer manager or supervisor JS. You also have to use database command to create a MySQL database.
+To run app someone must clone a repository. To clone repository you go into your terminal navigate to the folder you wish to run it from. Then you type in get clone. Also type in npm i  and will give you the rest of the needed files to run the app. Then you need to type in node customer manager or supervisor JS. You also have to use database command to create a MySQL database.
 
 
 ## About app
